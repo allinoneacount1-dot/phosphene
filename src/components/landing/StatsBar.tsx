@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useRef, useState } from "react";
 import { useGlobalStats } from "@/hooks/useCoinGecko";
 import { formatUSD } from "@/lib/utils/format";
@@ -30,7 +28,6 @@ function AnimatedNumber({ value, suffix }: { value: number; suffix?: string }) {
           const tick = (now: number) => {
             const elapsed = now - start;
             const progress = Math.min(elapsed / duration, 1);
-            // easeOutExpo
             const eased = 1 - Math.pow(2, -10 * progress);
             setDisplay(Math.floor(eased * value));
             if (progress < 1) requestAnimationFrame(tick);
@@ -74,9 +71,7 @@ export default function StatsBar() {
     },
     {
       label: "BTC Dominance",
-      value: global
-        ? `${global.market_cap_percentage.btc.toFixed(1)}%`
-        : "0%",
+      value: global ? `${global.market_cap_percentage.btc.toFixed(1)}%` : "0%",
       raw: global?.market_cap_percentage.btc ?? 0,
       suffix: "%",
     },
@@ -88,27 +83,22 @@ export default function StatsBar() {
   ];
 
   return (
-    <section className="relative w-full bg-[#050505] py-10">
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+    <section className="relative w-full bg-[#050505] py-12">
+      <div className="mx-auto max-w-5xl px-6">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           {stats.map((stat) => (
-            <GlassCard key={stat.label} className="group relative overflow-hidden p-5">
-              {/* gold top accent */}
+            <GlassCard key={stat.label} className="group relative overflow-hidden p-5 text-center">
               <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#FFE135]/30 to-transparent" />
-
               <p className="mb-2 font-mono text-[10px] tracking-[0.25em] text-white/30 uppercase">
                 {stat.label}
               </p>
-
-              <p className="font-mono text-lg font-semibold text-white/90 tabular-nums tracking-tight lg:text-xl">
+              <p className="font-mono text-lg font-semibold text-white/90 tabular-nums tracking-tight">
                 {isLoading ? (
-                  <span className="inline-block h-5 w-28 animate-pulse rounded bg-white/5" />
+                  <span className="inline-block h-5 w-20 animate-pulse rounded bg-white/5" />
                 ) : (
                   <AnimatedNumber value={stat.raw} suffix={stat.suffix} />
                 )}
               </p>
-
-              {/* hover glow */}
               <div className="pointer-events-none absolute inset-0 bg-[#FFE135]/[0.02] opacity-0 transition-opacity group-hover:opacity-100" />
             </GlassCard>
           ))}
