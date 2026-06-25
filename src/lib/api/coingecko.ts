@@ -37,5 +37,6 @@ export async function searchCoins(query: string) {
 export async function getGlobalData() {
   const res = await fetch(`${BASE}/global`);
   if (!res.ok) throw new Error("Failed to fetch global data");
-  return res.json();
+  const json = await res.json();
+  return json.data;
 }
